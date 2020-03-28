@@ -7,9 +7,9 @@ def matrix_AC(A, X):
     '''
     n, k = len(A), len(A[0])
     inputs = [Wire(x, None) for x in X]
-    outputs = [None for _ in range(k)]
+    outputs = [None for _ in range(n)]
     
-    for j in range(k):
+    for j in range(n):
         outputs[j] = vector_AC(A[:][j], inputs)
     
     return inputs, outputs
@@ -35,8 +35,8 @@ def vector_AC(A, inputs):
         return Add(gate.output, vector_AC(A[:-1], inputs[:-1])).output
 
 if __name__ == "__main__":
-    A = [[2, 4], [5, 1]]
-    X = [1, 2]
+    A = [[2, 4, 1], [5, 2, 2]]
+    X = [1, 2, 3]
 
     inputs, outputs = matrix_AC(A, X)
     resultats = [output.value for output in outputs]
