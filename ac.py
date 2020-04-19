@@ -1,6 +1,12 @@
 from wire import Wire
 from gates import Mult, Add, MultScalar
 
+def bentIdentity(X):
+    '''
+    Activation function bring non-linearities and multiplications gates.
+    f(x) = (sqrt(x^2 + 1) -1) / 2 + x
+    '''
+
 def matMat_AC(A, B):
     '''
     Arithmetic circuit for Matrix * Matrix multiplication
