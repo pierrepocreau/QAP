@@ -18,7 +18,7 @@ def sigmoid(x):
 
 def approx_bentIdentity(x):
     '''
-    Interpolation over [-10, 10].spécialisation polynome
+    Interpolation over [-10, 10].
     Ref:https://mortendahl.github.io/2017/04/17/private-deep-learning-with-mpc/#approximating-sigmoid
     '''
     coefs = [0.0643856681, 1.0, 0.1423387434, 0.0, -0.0039900774, 0.0, 7.60809e-5, 0.0, -7.114e-07, 0.0, 2.5e-9 ]

@@ -1,11 +1,48 @@
 from wire import Wire
 from gates import Mult, Add, MultScalar
 
-def bentIdentity(X):
+# RECURSIVE FUNCTION, No more than 1000 calls...
+# Maybe we could use generator instead of lists.
+def polynome_AC(x, coefs):
     '''
-    Activation function bring non-linearities and multiplications gates.
-    f(x) = (sqrt(x^2 + 1) -1) / 2 + x
+    Arithmetic circuit for P(x) where P is a polyome.
     '''
+    def aux(inputs, coefs):
+        coef = Wire(coefs.pop(), None)
+
+        if len(coefs) == 0:
+            return coef
+        
+        mult_gate = Mult(inputs[-1], aux(inputs[:-1], coefs))
+        inputs[-1].connect_exit(mult_gate)
+        return Add(coef, mult_gate.output).output
+
+    power = len(coefs) - 1
+    inputs = [Wire(x, None) for _ in range(power)] # As many input as deg(P)
+    #reverse so we use pop() instead of pop(0)
+    copy = coefs.copy()
+    copy.reverse()
+    return inputs, aux(inputs, copy)
+
+def polyVec(X, coefs):
+    pass
+
+def polyMat(X, coefs):
+    '''
+    Arithmetic circuit for P(X) where X is a matrice and P a polynome.
+    '''
+    inputs_X, outputs = [], []
+    for line in X:
+        input_line, output_line = [], []
+        for x in line:
+            inputs, output = polynome_AC(x, coefs)
+            input_line.append(inputs)
+            output_line.append(output)
+        
+        inputs_X.append(input_line)
+        outputs.append(output_line)
+    return inputs_X, outputs
+
 
 def matMat_AC(A, B):
     '''
@@ -37,6 +74,7 @@ def matVec_AC(A, X):
     
     return inputs, outputs
 
+# RECURSIVE FUNCTION, No more than 1000 calls...
 def vecVec_AC(A, inputs):
     '''
     Arithmetic circuit for vector * vector multiplication.
@@ -69,3 +107,13 @@ if __name__ == "__main__":
     resultats2 = [[output.value for output in ligne] for ligne in outputs2]
     print(resultats)
     print(resultats2)
+
+    poly = [1, 2, 1, 2, 0, 5]
+    inputs, calc = polynome_AC(2, poly)
+    print(calc.value)
+    print(inputs)
+
+    inputs, outputs = polyMat(A, poly)
+    resultats = [[output.value for output in ligne] for ligne in outputs]
+    print(resultats)
+    print(inputs)
